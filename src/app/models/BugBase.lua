@@ -1,3 +1,4 @@
+
 local BugBase = class("BugBase")
 
 BugBase.BUG_TYPE_ANT = 1
@@ -8,6 +9,10 @@ function BugBase:ctor( ... )
 	self.position_ = cc.p(0,0)
 	self.rotation_ = 0
 	self.type_ = BugBase.BUG_TYPE_ANT
+
+	self.dist_ = 0
+	self.distPositon_ = cc.p(0,0)
+	self.speed_ = 1
 
 end
 
@@ -29,10 +34,27 @@ function BugBase:setInitPosition(holePosition,rotation,dist)
     -- 因为需要虫子的头对着洞，所以虫子的方向实际上要旋转 180 度
     self.rotation_ = rotation - 180
 
+
+    --设置目的地位置
+    self.setDistPosition(holePosition)
+
     print("虫子来袭！！！")
     return self
 
     --cocos2dx 里，0 度正对右方，所以虫子图片里虫子的头部也是正对右方
+end
+
+--移动方法
+function BugBase:step( ... )
+	-- body
+	--每执行一次，虫子会向目的地的方向移动一小步
+	self.distPositon_ = self.distPositon_ - self.speed_
+
+	local radians = math.rad((self.rotation_+180))
+	self.position_ = cc.p(self.distPositon_.x+math.cos(radians)*self.dist_,
+		self.distPositon_.y-math.sin(radians))
+	return self
+
 end
 
 function BugBase:getPosition( ... )
@@ -52,7 +74,7 @@ end
 
 function BugBase:getDist( ... )
 	-- body
-	return self.dist
+	return self.dist_
 end
 
 function BugBase:setDistPosition( holePosition )
@@ -61,17 +83,8 @@ function BugBase:setDistPosition( holePosition )
 	return self
 end
 
+
 return BugBase
-
-
-
-
-
-
-
-
-
-
 
 
 
