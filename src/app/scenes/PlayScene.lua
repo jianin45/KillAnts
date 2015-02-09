@@ -43,7 +43,7 @@ function PlayScene:onEnter()
 		-- body
 		bug:step()
 		bugSprite:pos(bug:getPosition)
-		print(bug:getDist())
+		print(bug:getDis·t())
 	end)
 	--]]--
 end
